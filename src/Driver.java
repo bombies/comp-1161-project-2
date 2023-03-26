@@ -42,7 +42,7 @@ public class Driver {
             else
                 menuOptions += " Case " + selCase + "-----------\n";
 
-            menuOptions += "[P]lanner data\n[B]us management(Not yet implemented)\n[M]inistry interface\n";
+            menuOptions += "[P]lanner data\n[B]us management\n[M]inistry interface\n";
             menuOptions += "[L]oad test case\n[S]ave test case\n[T]est all cases\n";
             menuOptions += "-------System settings--------\n[I]D:";
 

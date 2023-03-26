@@ -1,8 +1,10 @@
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class WorkArea {
@@ -74,11 +76,27 @@ public class WorkArea {
 
 
     public ArrayList<Bus> loadBuses(String bfile) {
-        Scanner bscan = null;
-        ArrayList<Bus> blist = new ArrayList<Bus>();
+        try {
+            Scanner bscan = new Scanner(new File(bfile));
+            ArrayList<Bus> blist = new ArrayList<>();
 
-        return blist;
+            while (bscan.hasNextLine()) {
+                final var line = bscan.nextLine().split(" ");
+                blist.add(new Bus(
+                                line[0],
+                                Integer.parseInt(line[1]),
+                                Integer.parseInt(line[2]),
+                                Integer.parseInt(line[3]),
+                                mny
+                        )
+                );
+            }
 
+            return blist;
+        } catch (FileNotFoundException e) {
+            System.out.printf("There was no file with the name %s%n", bfile);
+            return new ArrayList<>();
+        }
     }
 
     public void loadTestCase(int caseNo, Scanner scan) {
