@@ -66,7 +66,10 @@ public class Driver {
                     work.planners = e.managePlanners(scan, work.planners, work.mny, work.buses);
                     break;
                 }
-
+                case 'B': {
+                    work.buses = e.manageBuses(scan, work.mny, work.buses);
+                    break;
+                }
                 case 'M': {
                     work.mny.showPublicInfo(scan, work);
                     break;

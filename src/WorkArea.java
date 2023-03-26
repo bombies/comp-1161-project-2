@@ -80,23 +80,49 @@ public class WorkArea {
             Scanner bscan = new Scanner(new File(bfile));
             ArrayList<Bus> blist = new ArrayList<>();
 
-            while (bscan.hasNextLine()) {
-                final var line = bscan.nextLine().split(" ");
-                blist.add(new Bus(
-                                line[0],
-                                Integer.parseInt(line[1]),
-                                Integer.parseInt(line[2]),
-                                Integer.parseInt(line[3]),
-                                mny
-                        )
-                );
-            }
+            while (bscan.hasNextLine())
+                blist.add(busFactory(bscan.nextLine().split(" ")));
 
             return blist;
         } catch (FileNotFoundException e) {
             System.out.printf("There was no file with the name %s%n", bfile);
             return new ArrayList<>();
         }
+    }
+
+    private Bus busFactory(String[] data) {
+        final var name = data[0].toLowerCase();
+        final var baseBus = new Bus(
+                data[0],
+                Integer.parseInt(data[1]),
+                Integer.parseInt(data[2]),
+                Integer.parseInt(data[3]),
+                mny
+        );
+
+        if (name.startsWith("bus")) {
+            return baseBus;
+        } else if (name.startsWith("spt")) {
+            return new SportsBus(
+                    baseBus,
+                    Integer.parseInt(data[4]),
+                    Integer.parseInt(data[5])
+            );
+        } else if (name.startsWith("prty")) {
+            return new PartyBus(
+                    new SportsBus(
+                            baseBus,
+                            Integer.parseInt(data[4]),
+                            Integer.parseInt(data[5])
+                    ),
+                    Integer.parseInt(data[6])
+            );
+        } else if (name.startsWith("trn")) {
+            return new TrainingBus(
+                    baseBus,
+                    Integer.parseInt(data[4])
+            );
+        } else return null;
     }
 
     public void loadTestCase(int caseNo, Scanner scan) {

@@ -6,11 +6,14 @@ public class PartyBus extends SportsBus {
     int barArea;
 
 
+    /**
+     * Default constructor for the PartyBus class
+     * @param s The SportsBus to base the PartyBus on
+     * @param barArea The area of the bar on the bus
+     */
     public PartyBus(SportsBus s, int barArea) {
         super(s.getBus(), s.getCompetitorArea(), s.getNumSecurity());
         this.barArea = barArea;
-
-
     }
 
 
@@ -35,5 +38,19 @@ public class PartyBus extends SportsBus {
 
     }
 
+    /**
+     * Overrides the updateLocalData method in the Bus class to allow for the bar area to be updated
+     * @param scan The scanner that will be used to read user input
+     */
+    @Override
+    public void updateLocalData(Scanner scan) {
+        super.updateLocalData(scan);
 
+        int curBarArea =getBarArea();
+        System.out.println("Hit enter to keep bar area at [" + curBarArea + "] or enter new bar area:");
+        String newBarArea = scan.nextLine();
+        int barArea = newBarArea.equals("") ? curBarArea : Integer.parseInt(newBarArea);
+
+        setBarArea(barArea);
+    }
 }

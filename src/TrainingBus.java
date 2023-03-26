@@ -5,6 +5,11 @@ public class TrainingBus extends Bus {
     private int teacherArea;
 
 
+    /**
+     * Default constructor for the TrainingBus class
+     * @param b The Bus to base the TrainingBus on
+     * @param teacherArea The area of the teacher area on the bus
+     */
     public TrainingBus(Bus b, int teacherArea) {
         super(b.getName(), b.getSize(), b.getPrice(), b.getLevel(), b.getMinistry());
         this.teacherArea = teacherArea;
@@ -26,8 +31,7 @@ public class TrainingBus extends Bus {
 
 
     public void setTeacherArea(int instructorArea) {
-
-        this.teacherArea = teacherArea;
+        this.teacherArea = instructorArea;
     }
 
 
@@ -41,6 +45,20 @@ public class TrainingBus extends Bus {
 
     }
 
+    /**
+     * Overrides the updateLocalData method in the Bus class to allow for the teacher area to be updated
+     * @param scan The scanner that will be used to read user input
+     */
+    @Override
+    public void updateLocalData(Scanner scan) {
+        super.updateLocalData(scan);
 
+        int curTeacherArea = getTeacherArea();
+        System.out.println("Hit enter to keep teacher area at [" + curTeacherArea + "] or enter new teacher area:");
+        String newTeacherArea = scan.nextLine();
+        int teacherArea = newTeacherArea.equals("") ? curTeacherArea : Integer.parseInt(newTeacherArea);
+
+        setTeacherArea(teacherArea);
+    }
 }
 

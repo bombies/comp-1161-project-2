@@ -3,6 +3,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 
 public class EntryScreen {
@@ -61,6 +62,54 @@ public class EntryScreen {
         return plans;
     }
 
+    public ArrayList<Bus> manageBuses(Scanner scan, Ministry mny, ArrayList<Bus> buses) {
+        ReportScreen r = new ReportScreen();
+        char mchoice = 'c';
+        String menu = "";
+        while (mchoice != 'X') {
+            String menuOptions = "[A]dd/Create bus\n[E]dit/Update bus\n";
+            menuOptions += "[L]ist/Read buses\n[D]elete bus\nE[x]it\n";
+            System.out.println(menuOptions);
+            menu = scan.next().toUpperCase();
+            mchoice = menu.charAt(0);
+            switch (mchoice) {
+                case 'A': {
+                    final var b = createBus(scan, mny);
+                    if (b != null)
+                        buses.add(b);
+                    break;
+                }
+                case 'L': {
+                    Collections.sort(buses);
+                    r.listBuses(buses, System.out);
+                    break;
+                }
+                case 'E': {
+                    System.out.println("Please enter the ID of the planner to be updated:");
+                    int pid = Integer.parseInt(scan.next());
+                    int pdx = findBus(buses, pid);
+                    if (pdx >= 0)
+                        buses.get(pdx).updateLocalData(scan);
+                    else
+                        System.out.println("Bus with id " + pid + " not found.");
+                    break;
+                }
+                case 'D': {
+                    System.out.println("Please enter the ID of the planner to be deleted:");
+                    int bid = Integer.parseInt(scan.next());
+                    int pdx = findBus(buses, bid);
+
+                    if (pdx >= 0)
+                        buses.remove(pdx);
+                    else
+                        System.out.println("Bus with id " + bid + " not found.");
+                    break;
+                }
+            }
+        }
+        return buses;
+    }
+
 
     public Planner createPlanner(Scanner scan, Ministry mny, ArrayList<Bus> buses) {
         Planner p = null;
@@ -75,31 +124,44 @@ public class EntryScreen {
         return p;
     }
 
+    public Bus createBus(Scanner scan, Ministry mny) {
+        if (scan == null)
+            scan = new Scanner(System.in);
+
+        scan.nextLine();
+
+        System.out.println("Please enter bus name: ");
+        String name = scan.nextLine();
+        System.out.println("Please enter bus size: ");
+        int size = Integer.parseInt(scan.nextLine());
+        System.out.println("Please enter bus price: ");
+        int price = Integer.parseInt(scan.nextLine());
+        System.out.println("Please enter bus comfort level: ");
+        int comfortLevel = Integer.parseInt(scan.nextLine());
+
+        return new Bus(
+                name,
+                size,
+                price,
+                comfortLevel,
+                mny
+        );
+    }
+
 
     public int findPlanner(ArrayList<Planner> plans, int pid) {
-        int pdx = -1;
-        int currdx = 0;
-        while ((currdx < plans.size()) && (pdx == -1)) {
-            if (plans.get(currdx).getId() == pid)
-                pdx = currdx;
-            currdx++;
-
-        }
-
-        return pdx;
-
+        return IntStream.range(0, plans.size())
+                .filter(i -> plans.get(i).getId() == pid)
+                .findFirst()
+                .orElse(-1);
     }
 
 
     public int findBus(ArrayList<Bus> buses, int bid) {
-        int bdx = -1;
-        ////code needed here to find bus with id bid in arraylist of buses
-
-
-        return bdx;
-
+        return IntStream.range(0, buses.size())
+                .filter(i -> buses.get(i).getId() == bid)
+                .findFirst()
+                .orElse(-1);
     }
-
-
 }
 
